@@ -1,0 +1,4 @@
+{
+  "maxReceiveCount": ${count},
+  "deadLetterTargetArn": "${arn}"
+}
