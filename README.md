@@ -15,7 +15,7 @@ The modules fall into clear groups:
 - **Core AWS primitives** — `bucket` (hardened S3), `queue` and `data_queue` (SQS + paired DLQ; `data_queue` also wires an S3 event trigger), `event_deadletter` (EventBridge rule DLQ).
 - **Compute / containers** — `cluster` (ECS on a spot EC2 ASG), `container` (ECS task def + service), `container_definition` (renders the container JSON), `ecr` (image repo), `ecs_sqs_autoscaling` (queue-depth autoscaler), `instance` (raw EC2), `vpc`.
 - **Edge / web** — `cdn` (CloudFront over a private S3 bucket), `edge` (CloudFront over an API-gateway origin), `certificate` (ACM + DNS validation), `cognito` (user pool), `appsync_api_key` (auto-rotating key), `eventbus` (EventBridge bus + archive).
-- **Config / identity / secrets** — `parameters` (SSM), `parameter_set` (a JSON blob written as one DynamoDB item), `secret`/`secrets` (Secrets Manager read/create), `user`/`developer` (IAM users), `grafana`, `github_repo`.
+- **Config / identity / secrets** — `parameters` (SSM), `parameter_set` (a JSON blob written as one DynamoDB item), `secret`/`secrets` (Secrets Manager read/create), `user`/`developer` (IAM users), `github_repo`.
 - **Third-party DNS / integration bundles** — `ses`, `sendgrid`, `flywheel` (also SendGrid — name is misleading), `customerio`, `stripe`, `gsuite`, `github_dommain`, `sentry_project`, `sentry_dsn`.
 
 ## Pipeline role
@@ -56,7 +56,6 @@ Resources are named by the `scope` module from `meta.owner/app/env/stage` plus `
 | `secrets` / `secret` | `secrets` creates `aws_secretsmanager_secret` + `secret_version`; `secret` is read-only (a `data` lookup by templated name). |
 | `vpc` / `instance` | `vpc` wraps `terraform-aws-modules/vpc` v3.14.1; `instance` provisions `aws_instance` + IAM role/instance-profile. |
 | `user` / `developer` | IAM users with access keys + attached policies; `developer` adds group membership. |
-| `grafana` | `grafana_data_source` (CloudWatch) backed by a dedicated IAM user. |
 | `sentry_project` / `sentry_dsn` | `sentry_project` creates a Sentry project + key and publishes the DSN to SSM; `sentry_dsn` reads a global DSN back out of SSM (read-only). |
 | `github_repo` / `github_dommain` | `github_repository` (+ teams, collaborators, Pages); `github_dommain` adds Route53 TXT records for GitHub domain/Pages verification. |
 | `ses` | `aws_ses_domain_identity` + verification + `noreply` email identity + identity policies + Route53 records. |
